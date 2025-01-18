@@ -35,7 +35,6 @@ export default function ChatPage() {
   const [isEntitiesMenuOpen, setIsEntitiesMenuOpen] = useState(false);
   const [showPrompts, setShowPrompts] = useState(true);
   const [currentPromptPair, setCurrentPromptPair] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const resetConversation = () => {
     setMessages([]);
@@ -122,17 +121,13 @@ export default function ChatPage() {
     if (!showPrompts) return;
 
     const timer = setInterval(() => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentPromptPair((prev) => {
-          const filteredPrompts = defaultPrompts.filter(prompt => 
-            selectedEntities.includes(prompt.capsuleId)
-          );
-          const maxPairs = Math.floor(filteredPrompts.length / 2);
-          return prev + 1 >= maxPairs ? 0 : prev + 1;
-        });
-        setIsAnimating(false);
-      }, 800);
+      setCurrentPromptPair((prev) => {
+        const filteredPrompts = defaultPrompts.filter(prompt =>
+          selectedEntities.includes(prompt.capsuleId)
+        );
+        const maxPairs = Math.floor(filteredPrompts.length / 2);
+        return prev + 1 >= maxPairs ? 0 : prev + 1;
+      });
     }, 5000);
 
     return () => clearInterval(timer);
@@ -319,7 +314,8 @@ export default function ChatPage() {
               className="flex-1 bg-gray-900 border border-gray-800 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-700"
             />
             <button
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => sendMessage()}
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              onClick={(e) => sendMessage()}
               disabled={!inputMessage.trim() || selectedEntities.length === 0}
               className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-800/50 hover:bg-gray-700 text-gray-300 hover:text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >

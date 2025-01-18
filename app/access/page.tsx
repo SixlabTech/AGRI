@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { capsules, type Capsule } from '@/lib/data/capsules';
+import { capsules } from '@/lib/data/capsules';
 
 interface Role {
   id: string;

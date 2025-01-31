@@ -1,12 +1,12 @@
 'use client';
 
-import { BarChart3, TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 
 export default function FinanceDashboard() {
   const stats = {
     main: {
       value: '2.4M€',
-      label: 'Chiffre d\'affaires mensuel',
+      label: 'Chiffre d/affaires mensuel',
       trend: 8.7
     },
     secondary: [

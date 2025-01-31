@@ -164,7 +164,7 @@ export default function DashboardPage() {
         <select
           value={selectedTimeRange}
           onChange={(e) => setSelectedTimeRange(e.target.value)}
-          className="border rounded-lg px-3 py-2"
+          className="border rounded-lg px-3 py-2 text-sm bg-white"
         >
           <option value="7d">7 derniers jours</option>
           <option value="30d">30 derniers jours</option>
@@ -174,74 +174,81 @@ export default function DashboardPage() {
       </div>
 
       {/* Grille des départements */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {departmentSummaries.map((dept) => (
-          <div key={dept.id} className="bg-white rounded-xl shadow-sm border p-6">
+          <div key={dept.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 overflow-hidden">
             {/* En-tête du département */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                  <dept.icon size={24} className="text-gray-700" />
+            <div className="p-4 border-b">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center">
+                    <dept.icon size={18} className="text-gray-700" />
+                  </div>
+                  <h2 className="font-semibold">{dept.name}</h2>
                 </div>
-                <h2 className="text-lg font-semibold">{dept.name}</h2>
+                <div className="flex items-center gap-1">
+                  <TrendingUp 
+                    size={16} 
+                    className={dept.stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'} 
+                  />
+                  <span className={`text-xs font-medium ${dept.stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {Math.abs(dept.stats.main.trend)}%
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <TrendingUp 
-                  size={20} 
-                  className={dept.stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'} 
-                />
-                <span className={`text-sm ${dept.stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                  {Math.abs(dept.stats.main.trend)}%
-                </span>
+
+              {/* Statistique principale */}
+              <div className="flex items-baseline gap-2">
+                <div className="text-xl font-bold">{dept.stats.main.value}</div>
+                <div className="text-gray-500 text-xs">{dept.stats.main.label}</div>
               </div>
             </div>
 
-            {/* Statistique principale */}
-            <div className="mb-4">
-              <div className="text-2xl font-bold">{dept.stats.main.value}</div>
-              <div className="text-gray-500 text-sm">{dept.stats.main.label}</div>
-            </div>
-
-            {/* Statistiques secondaires */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              {dept.stats.secondary.map((stat, index) => (
-                <div key={index}>
-                  <div className="font-semibold">{stat.value}</div>
-                  <div className="text-gray-500 text-xs">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Alertes */}
-            <div className="space-y-2 mb-4">
-              {dept.alerts.map((alert, index) => (
-                <div 
-                  key={index}
-                  className={`flex items-center gap-2 text-sm p-2 rounded-lg ${
-                    alert.type === 'warning' ? 'bg-orange-50 text-orange-700' : 'bg-green-50 text-green-700'
-                  }`}
-                >
-                  {alert.type === 'warning' ? (
-                    <AlertTriangle size={16} />
-                  ) : (
-                    <CheckCircle size={16} />
-                  )}
-                  {alert.message}
-                </div>
-              ))}
-            </div>
-
-            {/* Activité récente */}
-            <div className="border-t pt-4">
-              <div className="text-sm font-medium mb-2">Activité récente</div>
-              <div className="space-y-2">
-                {dept.recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm">
-                    <Clock size={14} className="text-gray-400" />
-                    <span>{activity.action}</span>
-                    <span className="text-gray-400 text-xs ml-auto">{activity.time}</span>
+            {/* Contenu */}
+            <div className="p-4 space-y-4">
+              {/* Statistiques secondaires */}
+              <div className="grid grid-cols-3 gap-2 text-center">
+                {dept.stats.secondary.map((stat, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-2">
+                    <div className="font-semibold text-sm">{stat.value}</div>
+                    <div className="text-gray-500 text-xs leading-tight">{stat.label}</div>
                   </div>
                 ))}
+              </div>
+
+              {/* Alertes */}
+              {dept.alerts.length > 0 && (
+                <div className="space-y-1.5">
+                  {dept.alerts.map((alert, index) => (
+                    <div 
+                      key={index}
+                      className={`flex items-center gap-1.5 text-xs p-1.5 rounded ${
+                        alert.type === 'warning' ? 'bg-orange-50 text-orange-700' : 'bg-green-50 text-green-700'
+                      }`}
+                    >
+                      {alert.type === 'warning' ? (
+                        <AlertTriangle size={12} />
+                      ) : (
+                        <CheckCircle size={12} />
+                      )}
+                      {alert.message}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Activité récente */}
+              <div className="border-t pt-3">
+                <div className="text-xs text-gray-500 mb-2">Dernières activités</div>
+                <div className="space-y-1.5">
+                  {dept.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-center gap-1.5 text-xs">
+                      <Clock size={12} className="text-gray-400 flex-shrink-0" />
+                      <span className="truncate">{activity.action}</span>
+                      <span className="text-gray-400 ml-auto flex-shrink-0">{activity.time}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

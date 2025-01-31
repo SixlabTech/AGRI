@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Users,
   Building2,
@@ -10,8 +10,10 @@ import {
   BarChart3,
   Settings,
   Menu,
+  Globe,
   ChevronDown,
   Building,
+  Filter,
   Briefcase,
   FileText,
   ShoppingCart,
@@ -35,7 +37,7 @@ import {
   Calendar,
   ClipboardList,
   FileSearch
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MenuItem {
   name: string;
@@ -47,46 +49,46 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
-    name: 'Vue d\'ensemble',
+    name: "Vue d'ensemble",
     icon: PieChart,
-    path: '/dashboard',
-    description: 'Tableau de bord général'
+    path: "/dashboard",
+    description: "Tableau de bord général"
   },
   {
-    name: 'Ressources Humaines',
+    name: "Ressources Humaines",
     icon: Users,
-    path: '/dashboard/rh',
-    description: 'Gestion RH',
+    path: "/dashboard/rh",
+    description: "Gestion RH",
     subItems: [
-      { name: 'Employés', icon: Users2, path: '/dashboard/rh/employes' },
-      { name: 'Recrutement', icon: Briefcase, path: '/dashboard/rh/recrutement' },
-      { name: 'Formation', icon: BookOpen, path: '/dashboard/rh/formation' },
-      { name: 'Paie', icon: CreditCard, path: '/dashboard/rh/paie' },
-      { name: 'Présence', icon: Calendar, path: '/dashboard/rh/presence' }
+      { name: "Employés", icon: Users2, path: "/dashboard/rh/employes" },
+      { name: "Recrutement", icon: Briefcase, path: "/dashboard/rh/recrutement" },
+      { name: "Formation", icon: BookOpen, path: "/dashboard/rh/formation" },
+      { name: "Paie", icon: CreditCard, path: "/dashboard/rh/paie" },
+      { name: "Présence", icon: Calendar, path: "/dashboard/rh/presence" }
     ]
   },
   {
-    name: 'Finance',
+    name: "Finance",
     icon: BarChart3,
-    path: '/dashboard/finance',
-    description: 'Gestion financière',
+    path: "/dashboard/finance",
+    description: "Gestion financière",
     subItems: [
-      { name: 'Comptabilité', icon: Calculator, path: '/dashboard/finance/comptabilite' },
-      { name: 'Facturation', icon: FileText, path: '/dashboard/finance/facturation' },
-      { name: 'Trésorerie', icon: CreditCard, path: '/dashboard/finance/tresorerie' },
-      { name: 'Rapports', icon: TrendingUp, path: '/dashboard/finance/rapports' }
+      { name: "Comptabilité", icon: Calculator, path: "/dashboard/finance/comptabilite" },
+      { name: "Facturation", icon: FileText, path: "/dashboard/finance/facturation" },
+      { name: "Trésorerie", icon: CreditCard, path: "/dashboard/finance/tresorerie" },
+      { name: "Rapports", icon: TrendingUp, path: "/dashboard/finance/rapports" }
     ]
   },
   {
-    name: 'Commercial',
+    name: "Commercial",
     icon: ShoppingCart,
-    path: '/dashboard/commercial',
-    description: 'Gestion commerciale',
+    path: "/dashboard/commercial",
+    description: "Gestion commerciale",
     subItems: [
-      { name: 'Ventes', icon: TrendingUp, path: '/dashboard/commercial/ventes' },
-      { name: 'Clients', icon: Users, path: '/dashboard/commercial/clients' },
-      { name: 'Devis', icon: FileText, path: '/dashboard/commercial/devis' },
-      { name: 'Contrats', icon: FileSearch, path: '/dashboard/commercial/contrats' }
+      { name: "Ventes", icon: TrendingUp, path: "/dashboard/commercial/ventes" },
+      { name: "Clients", icon: Users, path: "/dashboard/commercial/clients" },
+      { name: "Devis", icon: FileText, path: "/dashboard/commercial/devis" },
+      { name: "Contrats", icon: FileSearch, path: "/dashboard/commercial/contrats" }
     ]
   },
   {
@@ -172,7 +174,7 @@ export function Sidebar() {
         transition-all duration-300 h-screen 
         fixed left-0 top-0 flex flex-col
         shadow-xl backdrop-blur-sm
-        z-50
+        z-50 overflow-hidden
       `}
     >
       {/* Header avec logo et nom */}
@@ -195,155 +197,125 @@ export function Sidebar() {
         </button>
       </div>
 
-      {/* Navigation avec scroll masqué */}
-      <div className="flex-1 overflow-y-auto">
-        <nav className={`px-4 py-4 space-y-2 ${!isOpen ? 'items-center' : ''}`}>
-          {menuItems.map((item) => (
-            <div key={item.path} className="group relative">
-              <Link
-                href={item.path}
-                className={`
-                  w-full flex items-center p-3 rounded-xl
-                  transition-all duration-200 relative
-                  ${pathname === item.path ? 'bg-blue-500/10 text-blue-400' : 'hover:bg-gray-800/50 text-gray-300 hover:text-white'}
-                `}
-              >
-                <div className={`
-                  min-w-[2.5rem] h-10 rounded-lg
-                  flex items-center justify-center
-                  ${pathname === item.path ? 'bg-blue-500/20' : 'bg-gray-800/30 group-hover:bg-gray-800/50'}
-                  transition-colors
-                `}>
-                  <item.icon size={20} className={pathname === item.path ? 'text-blue-400' : ''} />
-                </div>
-                {!isOpen && (
-                  <div className="
-                    absolute left-20 bg-gray-900 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                    pointer-events-none z-50
-                  ">
-                    {item.name}
-                    {item.description && (
-                      <div className="text-xs text-gray-400">{item.description}</div>
-                    )}
-                  </div>
-                )}
-                {isOpen && (
-                  <div className="ml-3 flex-1">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        {menuItems.map((item) => (
+          <div key={item.path} className="group">
+            <button
+              onClick={() => item.subItems && toggleExpand(item.path)}
+              className={`
+                w-full flex items-center p-3 rounded-xl
+                transition-all duration-200
+                ${!isOpen ? 'justify-center' : ''}
+                ${pathname === item.path ? 'bg-blue-500/10 text-blue-400' : 'hover:bg-gray-800/50 text-gray-300 hover:text-white'}
+              `}
+            >
+              <div className={`
+                ${isOpen ? 'min-w-[2.5rem]' : 'w-10'} h-10 rounded-lg
+                flex items-center justify-center
+                ${pathname === item.path ? 'bg-blue-500/20' : 'bg-gray-800/30 group-hover:bg-gray-800/50'}
+                transition-colors
+              `}>
+                <item.icon size={20} className={pathname === item.path ? 'text-blue-400' : ''} />
+              </div>
+              {isOpen && (
+                <div className="ml-3 flex-1 flex items-center justify-between">
+                  <div>
                     <div className="font-medium">{item.name}</div>
                     {item.description && (
                       <div className="text-xs text-gray-400">{item.description}</div>
                     )}
                   </div>
-                )}
-              </Link>
-
-              {/* Sous-menus avec animation */}
-              {isOpen && item.subItems && expandedItems.includes(item.path) && (
-                <div className="mt-2 ml-4 space-y-1 animate-fadeIn">
-                  {item.subItems.map((subItem) => (
-                    <Link
-                      key={subItem.path}
-                      href={subItem.path}
+                  {item.subItems && (
+                    <ChevronDown
+                      size={16}
                       className={`
-                        flex items-center p-3 rounded-lg
-                        transition-all duration-200
-                        ${pathname === subItem.path ? 
-                          'bg-blue-500/10 text-blue-400' : 
-                          'text-gray-400 hover:bg-gray-800/30 hover:text-white'
-                        }
+                        transform transition-transform text-gray-400
+                        ${expandedItems.includes(item.path) ? 'rotate-180' : ''}
                       `}
-                    >
-                      <subItem.icon size={16} />
-                      <span className="ml-3 text-sm">{subItem.name}</span>
-                    </Link>
-                  ))}
+                    />
+                  )}
                 </div>
               )}
-            </div>
-          ))}
-        </nav>
-      </div>
+            </button>
+
+            {/* Sous-menus avec animation */}
+            {isOpen && item.subItems && expandedItems.includes(item.path) && (
+              <div className="mt-2 ml-4 space-y-1 animate-fadeIn overflow-hidden transition-all duration-300 ease-in-out">
+                {item.subItems.map((subItem) => (
+                  <Link
+                    key={subItem.path}
+                    href={subItem.path}
+                    className={`
+                      flex items-center p-3 rounded-lg
+                      transition-all duration-200
+                      ${pathname === subItem.path ? 
+                        "bg-blue-500/10 text-blue-400" : 
+                        "text-gray-400 hover:bg-gray-800/30 hover:text-white"
+                      }
+                    `}
+                  >
+                    <subItem.icon size={16} />
+                    <span className="ml-3 text-sm">{subItem.name}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </nav>
 
       {/* Footer avec notifications, paramètres et statut */}
-      <div className={`p-4 border-t border-gray-700/50 space-y-3`}>
-        <div className={`flex flex-col space-y-3 ${!isOpen && 'items-center'}`}>
-          {/* Notifications */}
-          <div className="group relative">
-            <div className={`
-              flex items-center bg-gray-800/30 p-3 rounded-xl hover:bg-gray-800/50 
-              transition-colors cursor-pointer
-              ${!isOpen ? 'w-14 justify-center' : 'w-full'}
-            `}>
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center relative">
-                <Bell size={18} className="text-blue-400" />
-                {notifications > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                    {notifications}
-                  </span>
-                )}
-              </div>
-              {!isOpen && (
-                <div className="
-                  absolute left-16 bg-gray-900 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap
-                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                  pointer-events-none z-50
-                ">
-                  Notifications
-                </div>
-              )}
+      <div className={`${isOpen ? 'px-6' : 'px-4'} py-4 border-t border-gray-700/50 space-y-3`}>
+        {/* Notifications */}
+        <div className={`
+          flex items-center ${isOpen ? 'justify-between' : 'justify-center'}
+          bg-gray-800/30 p-3 rounded-xl hover:bg-gray-800/50 transition-colors cursor-pointer
+        `}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Bell size={18} className="text-blue-400" />
             </div>
+            {isOpen && (
+              <span className="text-sm font-medium text-gray-200">Notifications</span>
+            )}
           </div>
+          {isOpen && notifications > 0 && (
+            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-lg font-medium">
+              {notifications}
+            </span>
+          )}
+        </div>
 
-          {/* Paramètres */}
-          <Link href="/dashboard/settings" className="group relative">
-            <div className={`
-              flex items-center bg-gray-800/30 p-3 rounded-xl hover:bg-gray-800/50 
-              transition-colors cursor-pointer
-              ${!isOpen ? 'w-14 justify-center' : 'w-full'}
-            `}>
-              <div className="w-8 h-8 rounded-lg bg-gray-700/50 flex items-center justify-center">
-                <Settings size={18} className="text-gray-300" />
-              </div>
-              {!isOpen && (
-                <div className="
-                  absolute left-16 bg-gray-900 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap
-                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                  pointer-events-none z-50
-                ">
-                  Paramètres
-                </div>
-              )}
+        {/* Paramètres */}
+        <div className={`
+          flex items-center ${isOpen ? 'justify-between' : 'justify-center'}
+          bg-gray-800/30 p-3 rounded-xl hover:bg-gray-800/50 transition-colors cursor-pointer
+        `}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Settings size={18} className="text-purple-400" />
             </div>
-          </Link>
-
-          {/* Statut système */}
-          <div className="group relative">
-            <div className={`
-              flex items-center bg-gray-800/30 p-3 rounded-xl
-              ${!isOpen ? 'w-14 justify-center' : 'w-full'}
-            `}>
-              <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-green-400"></div>
-              </div>
-              {!isOpen && (
-                <div className="
-                  absolute left-16 bg-gray-900 text-white px-3 py-2 rounded-md text-sm whitespace-nowrap
-                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                  pointer-events-none z-50
-                ">
-                  <div>Système actif</div>
-                  <div className="text-xs text-gray-400">v1.0.0</div>
-                </div>
-              )}
-              {isOpen && (
-                <div className="ml-3">
-                  <div className="text-sm font-medium text-gray-300">Système actif</div>
-                  <div className="text-xs text-gray-500">v1.0.0</div>
-                </div>
-              )}
-            </div>
+            {isOpen && (
+              <span className="text-sm font-medium text-gray-200">Paramètres</span>
+            )}
           </div>
+        </div>
+
+        {/* Statut du système */}
+        <div className={`
+          flex items-center ${isOpen ? 'gap-3' : 'justify-center'}
+          bg-gray-800/30 p-3 rounded-xl
+        `}>
+          <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+          </div>
+          {isOpen && (
+            <div>
+              <div className="text-sm font-medium text-gray-300">Système actif</div>
+              <div className="text-xs text-gray-500">v1.0.0</div>
+            </div>
+          )}
         </div>
       </div>
     </div>

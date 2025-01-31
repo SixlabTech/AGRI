@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 interface NavigationButton {
   href: string;
-  icon: React.ReactElement;
+  icon: JSX.Element;
   label: string;
   description: string;
   bgColor: string;
@@ -13,7 +13,6 @@ interface NavigationButton {
 }
 
 export default function HomePage() {
-  
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   const navigationButtons: NavigationButton[] = [
@@ -48,7 +47,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-4xl font-bold text-blue-600 relative">
           Bienvenue sur{' '}

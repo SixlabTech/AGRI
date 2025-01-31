@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { TrendingUp, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 
 export default function RHDashboard() {
   const stats = {
     main: { 
-      value: '1,234', 
-      label: 'Employés actifs',
+      value: "1,234", 
+      label: "Employés actifs",
       trend: 5.2
     },
     secondary: [
-      { value: '45', label: 'Recrutements en cours' },
-      { value: '92%', label: 'Taux de rétention' },
-      { value: '24', label: 'Formations planifiées' }
+      { value: "45", label: "Recrutements en cours" },
+      { value: "92%", label: "Taux de rétention" },
+      { value: "24", label: "Formations planifiées" }
     ],
     alerts: [
-      { type: 'warning', message: '3 postes critiques à pourvoir' },
-      { type: 'success', message: 'Objectifs de formation atteints' }
+      { type: "warning", message: "3 postes critiques à pourvoir" },
+      { type: "success", message: "Objectifs de formation atteints" }
     ],
     recentActivity: [
-      { action: 'Nouveau processus de recrutement IT', time: 'Il y a 2h' },
-      { action: 'Mise à jour du plan de formation', time: 'Il y a 4h' }
+      { action: "Nouveau processus de recrutement IT", time: "Il y a 2h" },
+      { action: "Mise à jour du plan de formation", time: "Il y a 4h" }
     ]
   };
 
@@ -35,14 +35,14 @@ export default function RHDashboard() {
         {/* Statistiques principales */}
         <div className="bg-white rounded-xl shadow-sm border p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Vue d'ensemble</h2>
+            <h2 className="text-lg font-semibold">Vue d"ensemble</h2>
             <div className="flex items-center gap-2">
               <TrendingUp 
                 size={20} 
-                className={stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'} 
+                className={stats.main.trend >= 0 ? "text-green-500" : "text-red-500"} 
               />
-              <span className={`text-sm ${stats.main.trend >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {Math.abs(stats.main.trend)}%
+              <span className={`text-sm ${stats.main.trend >= 0 ? "text-green-500" : "text-red-500"}`}>
+                {Math.abs(stats.main.trend)}
               </span>
             </div>
           </div>
@@ -71,10 +71,10 @@ export default function RHDashboard() {
               <div 
                 key={index}
                 className={`flex items-center gap-2 p-3 rounded-lg ${
-                  alert.type === 'warning' ? 'bg-orange-50 text-orange-700' : 'bg-green-50 text-green-700'
+                  alert.type === "warning" ? "bg-orange-50 text-orange-700" : "bg-green-50 text-green-700"
                 }`}
               >
-                {alert.type === 'warning' ? (
+                {alert.type === "warning" ? (
                   <AlertTriangle size={18} />
                 ) : (
                   <CheckCircle size={18} />
